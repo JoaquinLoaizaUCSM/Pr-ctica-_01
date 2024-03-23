@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta >
+  <title>Formulario Web Completo</title>
+</head>
+<body>
+  <div id="formulario">
+    <h2>Formulario de Pedido</h2>
+    <form id="formPedido">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required>
+      
+      <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="correo" required>
+      
+      <label for="telefono">Teléfono:</label>
+      <input type="tel" id="telefono" name="telefono" required>
+      
+      <h3>Productos</h3>
+      <select id="producto">
+        <option value="1">Leche - $2</option>
+        <option value="2">Tomate - $1</option>
+        <option value="3">Jugo- $5</option>
+      </select>
+      <button type="button" id="btnAgregarProducto">Agregar Producto</button>
+      
+      <h3>Total</h3>
+      <p>Subtotal: <span id="subtotal">$0.00</span></p>
+      <p>Impuestos: <span id="impuestos">$0.00</span></p>
+      <p>Costo de envío: <span id="costoEnvio">$0.00</span></p>
+      <p>Total: <span id="total">$0.00</span></p>
+      
+      <h3>Envío y Pago</h3>
+      <label for="metodoEnvio">Método de envío:</label>
+      <select id="metodoEnvio">
+        <option value="1">Envío estándar</option>
+        <option value="2">Envío express</option>
+      </select>
+      
+      <label for="metodoPago">Método de pago:</label>
+      <select id="metodoPago">
+        <option value="1">Tarjeta de crédito</option>
+        <option value="2">PayPal</option>
+      </select>
+      
+      <div id="infoPago"></div>
+      
+      <button type="submit" id="btnEnviarPedido">Enviar Pedido</button>
+    </form>
+  </div>
+
+  <script>
+    const productoSelect = document.getElementById("producto");
+    const btnAgregarProducto = document.getElementById("btnAgregarProducto");
+    const subtotalElement = document.getElementById("subtotal");
+    const impuestosElement = document.getElementById("impuestos");
+    const costoEnvioElement = document.getElementById("costoEnvio");
+    const totalElement = document.getElementById("total");
+
+    let carrito = [];
+    
+    btnAgregarProducto.addEventListener("click", agregarProducto);
+
+    function agregarProducto() {
+      const productoIndex = productoSelect.selectedIndex;
+      const productoOption = productoSelect.options[productoIndex];
+      const productoInfo = productoOption.text.split(" - ");
+      const productoNombre = productoInfo[0];
+      const productoPrecio = parseFloat(productoInfo[1].replace("$", ""));
+      const producto = { nombre: productoNombre, precio: productoPrecio };
+      
+      carrito.push(producto);
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      let subtotal = 0;
+      for (let producto of carrito) {
+        subtotal += producto.precio;
+      }
+
+      const impuestos = subtotal * 0.15;
+      const costoEnvio = 10;
+      const total = subtotal + impuestos + costoEnvio;
+
+      subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+      impuestosElement.textContent = `$${impuestos.toFixed(2)}`;
+      costoEnvioElement.textContent = `$${costoEnvio.toFixed(2)}`;
+      totalElement.textContent = `$${total.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
